@@ -1,26 +1,38 @@
 #include <iostream>
-#include <math.h>
+#include<bits/stdc++.h>
+
 using namespace std;
 
 int main()
 {
-	long long int n, i, root;
-	bool flag=0;
-	cin>>n;
+    unsigned long long s;
+    cin>>s;
 
-	root = sqrt(n);
+    bool prime;
+    if (s==1)
+        {
+        cout<<"Prime Number";
+        return 0;
+        }
+    if (s==0)
+        {
+        cout<<"Prime Number";
+        return 0;
+        }
 
-	for (i=2; i<=root; i++)
-	{
-		if (!(n%i))
-		{
-			flag=1;
-			break;
-		}
-	}
+    prime=true;
+    for(int i=2; i<=sqrt(s);i++)
+    {
+        if(s%i == 0)
+        {
+        prime=false;
+        break;
+        }
+    }
 
-	if (flag)	cout<<"Not Prime";
-	else		cout<<"Prime";
-
-	return 0;
+    if (prime==true)
+        cout<<"Prime Number";
+    else
+        cout<<"Prime Number";
+    return 0;
 }
