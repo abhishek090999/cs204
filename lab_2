@@ -125,9 +125,9 @@ void Find(struct node **str,int a,int b)
         if((temp->x==a)&&(temp->y==b))
         {
             s[l].push_back('T');
-            s[l].push_back('R');
-            s[l].push_back('U');
-            s[l].push_back('E');
+            s[l].push_back('r');
+            s[l].push_back('u');
+            s[l].push_back('e');
             l++;
             break;
         }
@@ -136,10 +136,10 @@ void Find(struct node **str,int a,int b)
     if(temp==NULL)
 {
 s[l].push_back('F');
-s[l].push_back('A');
-s[l].push_back('L');
-s[l].push_back('S');
-s[l].push_back('E');
+s[l].push_back('a');
+s[l].push_back('l');
+s[l].push_back('s');
+s[l].push_back('e');
 l++;
 }
 
