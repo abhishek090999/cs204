@@ -1,0 +1,67 @@
+#include<iostream>
+#include<string.h>
+using namespace std;
+int main()
+{
+int n;
+cin>>n;
+string str[n];
+char s[n][50];
+int top[n];
+int flag[n];
+for(int i=0;i<n;i++)
+{
+top[i]=-1;
+flag[i]=1;
+}
+int m;
+for(int i=0;i<n;i++)
+{
+cin>>str[i];
+ m=str[i].length();
+for(int j=0;j<m;j++)
+{
+if(str[i][j]=='('||str[i][j]=='{'||str[i][j]=='<'||str[i][j]=='[')
+{
+top[i]++;
+s[i][top[i]]=str[i][j];
+}
+
+if(str[i][j]=='|')
+	{
+		if(top[i]==-1)
+		{top[i]++;
+	          s[i][top[i]]=str[i][j];}
+		else if(s[i][top[i]]=='|') {top[i]--;}
+		else {top[i]++;
+			s[i][top[i]]=str[i][j];}			
+	}
+
+if(str[i][j]==')'||str[i][j]=='}'||str[i][j]==']'||str[i][j]=='>')
+{
+	if(top[i]==-1)
+	{flag[i]=0;
+	 break;}
+
+	else if(str[i][j]==')'&&s[i][top[i]]=='(') top[i]--;
+	else if(str[i][j]==']'&&s[i][top[i]]=='[') top[i]--;
+	else if(str[i][j]=='}'&&s[i][top[i]]=='{') top[i]--;
+	else if(str[i][j]=='>'&&s[i][top[i]]=='<') top[i]--;
+	else{flag[i]=0;
+		break;}	
+}
+
+
+
+}
+if(top[i]!=-1){flag[i]=0;}
+}
+for(int i=0;i<n;i++)
+{
+if(flag[i]==1) cout<<"YES"<<endl;
+else cout<<"NO"<<endl;
+}
+
+
+return 0;
+}
