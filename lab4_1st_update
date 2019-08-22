@@ -1,0 +1,257 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct etree
+{
+    string value;
+    etree* left, *right;
+};
+
+bool isOperator(string c)
+{
+   	 if (c == "+" || c == "-" ||
+            c == "*" || c == "/" ||
+            c == "^")
+       	 return 1;
+    	 return 0;
+}
+
+int pd(string c)
+{
+    if(c == "^")
+    return 3;
+    else if(c == "*" || c == "/")
+    return 2;
+    else if(c == "+" || c == "-")
+    return 1;
+    else
+    return -1;
+}
+
+etree* newNode(string v)
+{
+    etree *temp = new etree;
+    temp->left = temp->right = NULL;
+    temp->value = v;
+    return temp;
+}
+
+
+
+vector <string> itop(vector<string> str)
+{
+    stack<string> st;
+    st.push("END");
+    vector <string> opr;
+    for(int i = 0; i < str.size(); i++)
+    {
+
+        if(str[i]!="("&&str[i]!=")"&&str[i]!="*"&&str[i]!="^"&&str[i]!="-"&&str[i]!="+"&&str[i]!="/")
+        opr.push_back(str[i]);
+
+
+        else if(str[i] == "(")
+
+        st.push("(");
+
+
+        else if(str[i] == ")")
+        {
+            while(st.top() != "END"&& st.top() != "(")
+            {
+                string s = st.top();
+                st.pop();
+               opr.push_back(s);
+            }
+            if(st.top() == "(")
+            {
+                string s = st.top();
+                st.pop();
+            }
+        }
+
+
+        else{
+
+            while(st.top() != "END" && pd(str[i]) <= pd(st.top()))
+            {
+		    if(pd(str[i])==3 && pd(st.top())==3)break;
+                string s = st.top();
+                st.pop();
+                opr.push_back(s);
+            }
+            st.push(str[i]);
+        }
+
+    }
+
+    while(st.top() != "END")
+    {
+        string s = st.top();
+        st.pop();
+        opr.push_back(s);
+    }
+
+    return opr;
+}
+
+
+
+
+etree* cons_Tree(vector <string> postfix)
+{
+    stack<etree *> st;
+    etree *t, *t1, *t2;
+
+
+
+    for (int i=0; i<postfix.size(); i++)
+    {
+
+
+        if (isOperator(postfix[i])==0)
+        {
+            t = newNode(postfix[i]);
+            st.push(t);
+        }
+        else
+
+        {
+            t = newNode(postfix[i]);
+              t1 = st.top();
+
+            st.pop();
+
+            t2 = st.top();
+            st.pop();
+
+
+            t->right = t1;
+            t->left = t2;
+
+
+            st.push(t);
+        }
+    }
+
+
+    t = st.top();
+    st.pop();
+
+    return t;
+}
+
+int to_interger(string s)
+{
+
+ int integer=stoi(s);
+
+    return integer;
+}
+
+
+int evaluate(etree* root)
+{
+
+    if (!root)
+        return 0;
+
+
+    if (!root->left && !root->right)
+        return to_interger(root->value);
+
+
+    int l_val = evaluate(root->left);
+
+
+    int r_val = evaluate(root->right);
+
+
+    if (root->value=="+")
+        return l_val+r_val;
+
+    if (root->value=="-")
+        return l_val-r_val;
+
+    if (root->value=="*")
+        return l_val*r_val;
+    if(root->value=="/")
+	    return l_val/r_val;
+	if(root->value=="^")
+		return pow(l_val,r_val);
+	return -1;
+}
+
+int main(){
+	unsigned long long int t;cin>>t;
+	while(t--){
+		long long int n;
+		cin>>n;
+		while(n--)
+		{
+		int flag=1;
+	string s;
+	cin>>s;
+	vector <string> v;
+	bool op=0;
+	bool g=0;
+	for(int i=0;i<s.length();i++){
+		if(s[i]=='('||s[i]==')'||s[i]=='*'||s[i]=='^'||s[i]=='-'||s[i]=='+'||s[i]=='/'){
+
+			string result;
+			result+=s[i];
+			if(i==0&&s[i]=='-'){
+			    g=1;
+			    v.push_back("(");
+			    v.push_back("0");
+
+			}
+			if(i!=0&&(s[i]=='-'&&op==1)){
+			    g=1;
+			    v.push_back("(");
+			    v.push_back("0");
+			}
+			if(s[i]!=')')op=1;
+			v.push_back(result);
+		}
+		else{
+		    op=0;
+			string result;
+			while(s[i]!='('&&s[i]!=')'&&s[i]!='*'&&s[i]!='^'&&s[i]!='-'&&s[i]!='+'&&s[i]!='/'&&i<s.length()){
+				if(s[i]>='0'&&s[i]<='9'){
+				result+=s[i];
+				i++;
+			}
+			else{
+				flag=0;
+				break;
+			}
+			}
+			i--;
+			v.push_back(result);
+			if(g==1){
+			    v.push_back(")");
+			    g=0;
+			}
+		}
+		if(flag==0)break;
+	}
+	if(flag){
+
+	vector <string> abc=itop(v);
+
+	etree*t = cons_Tree(abc);
+
+
+	cout<<evaluate(t)<<endl;
+}
+else{
+	cout<<"CANT BE EVALUATED"<<endl;
+}
+}
+	}
+
+	return 0;
+
+
+}
